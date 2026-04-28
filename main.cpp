@@ -2,6 +2,7 @@
 #include <vector>
 #include "../include/hash_ring.h"
 #include "../include/graph.h"
+#include "../include/scheduler.h"   //  NEW INCLUDE
 
 using namespace std;
 
@@ -75,25 +76,18 @@ int main() {
 
     Graph network;
 
-    // Add connections (latency in ms)
-
     network.addEdge("ServerA","ServerB",10);
-
     network.addEdge("ServerA","ServerC",20);
-
     network.addEdge("ServerB","ServerC",5);
-
     network.addEdge("ServerB","ServerD",15);
-
     network.addEdge("ServerC","ServerD",10);
-
-
-    // Run Dijkstra
 
     network.shortestPath("ServerA");
 
 
-    //  NEW FEATURE — File Transfer Simulation
+    // ============================
+    // File Transfer Simulation
+    // ============================
 
     network.transferFile(
         "ServerA",
@@ -115,6 +109,41 @@ int main() {
     cout << "\n--- Server Loads After Removal ---\n";
 
     ring.displayServerLoads();
+
+
+
+    // ============================
+    // NEW FEATURE — Greedy Scheduling
+    // ============================
+
+    cout << "\n--- Greedy Job Scheduling ---\n";
+
+    Scheduler scheduler(10);
+
+    vector<FileJob> jobs;
+
+    // Sample jobs
+
+    jobs.push_back({"job_file1.txt",9,0});
+    jobs.push_back({"job_file2.txt",5,0});
+    jobs.push_back({"job_file3.txt",8,0});
+    jobs.push_back({"job_file4.txt",3,0});
+    jobs.push_back({"job_file5.txt",7,0});
+
+
+    // Assign deadlines
+
+    scheduler.assignDeadlines(
+        jobs
+    );
+
+
+    // Run greedy scheduling
+
+    scheduler.scheduleJobs(
+        jobs
+    );
+
 
 
     cout << "\nSystem Execution Completed\n";
